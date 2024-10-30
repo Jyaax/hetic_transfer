@@ -1,2 +1,2 @@
 bash:
-	docker exec -it express_hetic_live-express-1 bash
+	docker exec -it hetic_transfer-1 bash
