@@ -18,3 +18,10 @@ services:
     volumes:
       - ./backend/app:/app
     command: 'sh -c "cd /app && npm run start"'
+
+  frontend:
+    image: nginx:latest
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    ports:
+      - "3001:80"
