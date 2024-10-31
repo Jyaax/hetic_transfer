@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         const data = await response.json();
         alert(data.message);
-        fetchFiles(); // Rafraîchit la liste des fichiers
+        fetchFiles();
       } catch (error) {
         console.error("Erreur lors de la suppression du fichier :", error);
       }

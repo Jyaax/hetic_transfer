@@ -18,7 +18,7 @@ services:
     volumes:
       - ./backend/app:/app
       - ./backend/app/uploads:/app/uploads
-    command: 'sh -c "cd /app && npm install && npm install mysql && npm run start"'
+    command: 'sh -c "cd /app && npm install && npm install && npm run start"'
 
   frontend:
     image: nginx:latest
