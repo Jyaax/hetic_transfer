@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import shareRoutes from './route/routes.js';
+import fileRoutes from './route/routes.js';
 
 dotenv.config();
 
@@ -12,6 +12,6 @@ const port = 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use('/api/share', shareRoutes);
+app.use("/file", fileRoutes);
 
 app.listen(port, () => console.log(`App running on port ${port}`));

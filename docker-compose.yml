@@ -18,4 +18,7 @@ services:
     volumes:
       - ./backend/app:/app
       - ./backend/app/uploads:/backend/app/uploads
-    command: 'sh -c "cd /app && npm run start"'
+    command: 'sh -c "cd /app && npm install && npm run start"'
+
+  frontend:
+    image: nginx:l
