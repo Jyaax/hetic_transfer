@@ -1,44 +1,17 @@
 import express from "express";
 import cors from "cors";
-import { getRoutes } from "./route/api.js";
-import { getAdminRoutes } from "./route/admin.js";
-import mysql from "mysql2/promise";
-import { getRepository } from "./repository/repository.js";
-import * as process from "node:process";
+import apiRouter from "./route/api.js";
 
-const server = express();
-const port = 3000;
+const app = express();
+const PORT = 3000;
 
-const database = mysql.createPool({
-  host: process.env.DB_HOST,
-  port: 3306,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: "express",
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Création de la route api
+app.use("/api", apiRouter);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-server.use(cors());
-
-const repository = getRepository(database);
-
-const app = {
-  repository,
-};
-
-const routes = getRoutes(app);
-const adminRoutes = getAdminRoutes();
-
-server.use(express.json());
-server.use(express.static("./public"));
-
-server.use(routes);
-// server.use("/admin", adminRoutes)
-
-server.use((req, res, next) => {
-  res.status(404);
-  res.json({
-    message: "t'es perdu",
-  });
-});
-
-server.listen(port, () => console.log(`App running on port ${port}`));

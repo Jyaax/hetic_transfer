@@ -1,30 +1,13 @@
 import express from "express";
-import { getAll, getOne, postThings } from "../controller/api_controller.js";
-import { checkSchema } from "express-validator";
-import { user_schema } from "../schema/user_schema.js";
+import multer from "multer";
+import { handleUploadFiles } from "../controller/api_controller.js";
 
-export function getRoutes(app) {
-  const router = express.Router();
+const router = express.Router();
+const upload = multer({ dest: "uploads/" }); // Dossier temporaire pour les uploads
 
-  // router.use((req, res, next) => {
-  //     res.write("Début du middleware \n")
-  //     // res.send()
-  //
-  //     next()
-  //
-  //     res.write("Fin du middleware \n")
-  //     res.send()
-  // })
+// Route pour upload un fichier
+router.post("/upload", upload.single("file"), (req, res) => {
+  handleUploadFiles(req, res);
+});
 
-  router.get("/", getAll(app));
-
-  router.post("/", checkSchema(user_schema), postThings());
-
-  router.get("/:id(\\d+)", getOne(app));
-
-  router.get("/private", (req, res, next) => {
-    res.download("./public/image.png");
-  });
-
-  return router;
-}
+export default router;
