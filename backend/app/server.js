@@ -1,17 +1,17 @@
 import express from "express";
 import cors from "cors";
-import apiRouter from "./route/api.js";
+import dotenv from "dotenv";
+import fileRoutes from "./route/routes.js";
+
+dotenv.config();
+
+console.log(process.env);
 
 const app = express();
-const PORT = 3000;
+const port = 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use("/file", fileRoutes);
 
-// Création de la route api
-app.use("/api", apiRouter);
-
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+app.listen(port, () => console.log(`App running on port ${port}`));

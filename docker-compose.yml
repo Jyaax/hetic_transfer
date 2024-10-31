@@ -17,7 +17,7 @@ services:
       - "8090:3000"
     volumes:
       - ./backend/app:/app
-      - ./backend/app/uploads:/app/uploads
+      - ./backend/app/uploads:/backend/app/uploads
     command: 'sh -c "cd /app && npm install && npm run start"'
 
   frontend:
