@@ -21,4 +21,8 @@ services:
     command: 'sh -c "cd /app && npm install && npm run start"'
 
   frontend:
-    image: nginx:l
+    image: nginx:latest
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    ports:
+      - "3001:80"
