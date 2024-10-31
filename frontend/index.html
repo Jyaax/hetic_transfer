@@ -3,20 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
     <title>Hetic Transfer</title>
   </head>
   <body>
     <h1>Uploader un fichier</h1>
-    <div class="file-upload">
+    <div>
       <input type="file" id="file-input" />
       <button id="upload-button">Uploader</button>
     </div>
+    <p id="uploads-size">Taille actuelle du dossier : Calcul en cours...</p>
 
     <script>
       const fileInput = document.getElementById("file-input");
       const uploadButton = document.getElementById("upload-button");
+      const uploadsSizeElement = document.getElementById("uploads-size");
       let fileList = [];
+      let uploadsSize = 0;
+
+      // Fonction pour obtenir la taille actuelle du dossier uploads
+      async function checkUploadsSize() {
+        try {
+          const response = await fetch("http://localhost:8090/api/size");
+          const data = await response.json();
+          console.log("Réponse de l'API :", data);
+          uploadsSize = data.sizeInGB;
+          uploadsSizeElement.textContent = `Taille actuelle du dossier : ${uploadsSize.toFixed(
+            2
+          )} Go`;
+        } catch (error) {
+          console.error(
+            "Erreur de récupération de la taille du dossier :",
+            error
+          );
+        }
+      }
+
+      // Charger la taille du dossier au chargement de la page
+      window.onload = checkUploadsSize;
 
       fileInput.addEventListener("change", () => {
         const file = fileInput.files[0];
@@ -25,8 +48,14 @@
         }
       });
 
-      // Uploader un fichier au clic si la liste n'est pas vide
       uploadButton.addEventListener("click", async () => {
+        await checkUploadsSize();
+
+        if (uploadsSize >= 2) {
+          alert("Espace insuffisant ! Le dossier d'uploads a atteint 2 Go.");
+          return;
+        }
+
         if (fileList.length === 0) {
           alert("Aucun fichier à uploader !");
           return;
@@ -43,16 +72,17 @@
 
           const data = await response.json();
 
-          // Upload le fichier et réinitialise
+          // Upload le fichier et réinitialise puis update la taille
           if (data.success) {
             alert("Fichier uploadé avec succès !");
             fileInput.value = "";
             fileList = [];
+            checkUploadsSize();
           } else {
             alert(data.error);
           }
         } catch (error) {
-          console.error("Erreur de requête:", error);
+          console.error("Erreur de requête :", error);
         }
       });
     </script>
