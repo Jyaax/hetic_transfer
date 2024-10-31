@@ -1,8 +1,16 @@
 import express from "express";
-import { generateShareLink, downloadFile, displayFiles, deleteFiles, renameFiles } from "../controller/file_controllers";
-import { handleUploadFiles, getUploadsSize } from "../controller/api_controller.js";
+import {
+  generateShareLink,
+  downloadFile,
+  displayFiles,
+  deleteFiles,
+  renameFiles,
+} from "../controller/file_controllers.js";
+import {
+  handleUploadFiles,
+  getUploadsSize,
+} from "../controller/api_controller.js";
 import multer from "multer";
-
 
 const router = express.Router();
 const upload = multer({ dest: "uploads/" }); // Dossier temporaire pour les uploads
@@ -19,8 +27,7 @@ router.post("/generate-share-link/:fileId", generateShareLink);
 router.get("/download/:token", downloadFile);
 
 // Route pour afficher les fichiers
-router.get("/list-files", displayFiles );
-
+router.get("/list-files", displayFiles);
 
 // Route pour modifier le nom d'un fichier
 router.put("/rename-file", renameFiles);
