@@ -1,19 +1,10 @@
 import express from "express";
-import {
-  generateShareLink,
-  downloadFile,
-  displayFiles,
-  deleteFiles,
-  renameFiles,
-} from "../controller/file_controllers.js";
-import {
-  handleUploadFiles,
-  getUploadsSize,
-} from "../controller/api_controller.js";
+import {generateShareLink,downloadFile,displayFiles,deleteFiles,renameFiles} from "../controller/file_controllers.js";
+import {handleUploadFiles,getUploadsSize} from "../controller/api_controller.js";
 import multer from "multer";
 
 const router = express.Router();
-const upload = multer({ dest: "uploads/" }); // Dossier temporaire pour les uploads
+const upload = multer({ dest: "uploads/" });
 
 // Route pour upload un fichier
 router.post("/upload", upload.single("file"), (req, res) => {

@@ -43,7 +43,7 @@ export function downloadFile(req, res) {
 
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if (err) {
-        console.log("Erreur de vérification du token :", err);
+        console.error("Erreur de vérification du token :", err);
         if (err.name === "TokenExpiredError") {
           return res.status(401).json({ message: "Le lien de partage a expiré." });
         }
@@ -56,10 +56,22 @@ export function downloadFile(req, res) {
       }
 
       const filePath = path.join("uploads", fileId);
+
+      // Assurez-vous que le fichier existe
+      if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ message: "Fichier non trouvé." });
+      }
+
+      // Utilisez le nom de fichier tel qu'il est
+      const originalFileName = fileId;
+
+      // Ajoutez l'en-tête Content-Disposition pour le téléchargement
+      res.setHeader("Content-Disposition", `attachment; filename="${originalFileName}"`);
+
       res.sendFile(path.resolve(filePath), (err) => {
         if (err) {
           console.error("Erreur lors de l'envoi du fichier :", err);
-          return res.status(404).json({ message: "Fichier non trouvé." });
+          return res.status(500).json({ message: "Erreur lors de l'envoi du fichier." });
         }
       });
     });
@@ -68,6 +80,7 @@ export function downloadFile(req, res) {
     res.status(500).json({ message: "Erreur interne du serveur." });
   }
 }
+
 
 
 

@@ -161,8 +161,24 @@ document.addEventListener("DOMContentLoaded", () => {
            
             const downloadButton = document.createElement("button");
             downloadButton.textContent = "Télécharger";
-            downloadButton.onclick = () => {
-              window.open(`http://localhost:8090/file/download/${file}`, "_blank");
+            downloadButton.onclick = async () => {
+              try {
+                // Faites une requête pour obtenir un jeton valide
+                const response = await fetch(`http://localhost:8090/file/generate-share-link/${file}`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ userId: "user123" }) // Exemple d'ID utilisateur en dur
+                });
+                const data = await response.json();
+            
+                if (data.shareLink) {
+                  window.open(data.shareLink, "_blank");
+                } else {
+                  alert("Impossible de générer un lien de téléchargement.");
+                }
+              } catch (error) {
+                console.error("Erreur lors de la génération du lien de téléchargement :", error);
+              }
             };
   
            
@@ -234,35 +250,3 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchFiles();
   });
   
-  async function fetchFiles() {
-    try {
-      const response = await fetch("http://localhost:8090/file/list-files");
-      const data = await response.json();
-
-      if (data.files) {
-        const fileList = document.getElementById("file-list");
-        fileList.innerHTML = ""; 
-
-        data.files.forEach((fileName) => {
-          const listItem = document.createElement("li");
-          listItem.textContent = fileName;
-
-         
-          const downloadButton = document.createElement("button");
-          downloadButton.textContent = "Télécharger";
-          downloadButton.onclick = () => {
-            window.location.href = `http://localhost:8090/file/download/${fileName}`;
-          };
-
-          
-          listItem.appendChild(downloadButton);
-          fileList.appendChild(listItem);
-        });
-      }
-    } catch (error) {
-      console.error("Erreur lors de la récupération des fichiers :", error);
-    }
-  }
-
-
-  fetchFiles();

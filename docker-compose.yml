@@ -17,8 +17,8 @@ services:
       - "8090:3000"
     volumes:
       - ./backend/app:/app
-      - ./backend/app/uploads:/backend/app/uploads
-    command: 'sh -c "cd /app && npm install && npm run start"'
+      - ./backend/app/uploads:/app/uploads
+    command: 'sh -c "cd /app && npm install && npm install mysql && npm run start"'
 
   frontend:
     image: nginx:latest
