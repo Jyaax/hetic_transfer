@@ -1,0 +1,20 @@
+html{
+    margin: 0;
+    padding: 0;
+    height: 100dvh;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5dc
+}
+
+.container {
+    display: flex ;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #cecece;
+    width: fit-content;
+}
