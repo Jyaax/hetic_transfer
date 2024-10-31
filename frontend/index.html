@@ -3,15 +3,63 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HeticTransfer</title>
     <link rel="stylesheet" href="style.css" />
+    <title>Hetic Transfer</title>
   </head>
   <body>
-    <form id="uploadForm">
-      <input type="file" id="fileInput" name="file" />
-      <button type="submit">Uploader un fichier</button>
-    </form>
-    <ul id="fileList"></ul>
-    <script src="app.js"></script>
+    <h1>Uploader un fichier</h1>
+    <input type="file" id="file-input" />
+    <button id="upload-button">Uploader</button>
+    <ul id="file-list"></ul>
+
+    <script>
+      const fileInput = document.getElementById("file-input");
+      const uploadButton = document.getElementById("upload-button");
+      const fileListElement = document.getElementById("file-list");
+      let fileList = [];
+
+      fileInput.addEventListener("change", () => {
+        const file = fileInput.files[0];
+        if (file) {
+          fileList = [file];
+          const listItem = document.createElement("li");
+          listItem.textContent = file.name;
+          fileListElement.innerHTML = "";
+          fileListElement.appendChild(listItem);
+        }
+        fileInput.value = "";
+      });
+
+      // Uploader un fichier au clic si la liste n'est pas vide
+      uploadButton.addEventListener("click", async () => {
+        if (fileList.length === 0) {
+          alert("Aucun fichier à uploader !");
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", fileList[0]);
+
+        try {
+          const response = await fetch("http://localhost:8090/api/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await response.json();
+
+          //Upload le fichier et réinitialise la liste apres
+          if (data.success) {
+            alert("Fichier uploadé avec succès !");
+            fileListElement.innerHTML = "";
+            fileList = [];
+          } else {
+            alert(data.error);
+          }
+        } catch (error) {
+          console.error("Erreur de requête:", error);
+        }
+      });
+    </script>
   </body>
 </html>
