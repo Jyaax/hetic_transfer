@@ -6,8 +6,9 @@ services:
     volumes:
       - ./init:/docker-entrypoint-initdb.d
     environment:
+      MySQL_ROOT_USER: ${DB_USER}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: "express"
+      MYSQL_DATABASE: "database"
 
   express:
     image: node:23
@@ -17,8 +18,7 @@ services:
       - "8090:3000"
     volumes:
       - ./backend/app:/app
-      - ./backend/app/uploads:/app/uploads
-    command: 'sh -c "cd /app && npm install && npm install && npm run start"'
+    command: 'sh -c "cd /app && npm install && npm install mysql && npm run start"'
 
   frontend:
     image: nginx:latest
