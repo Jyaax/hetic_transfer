@@ -1,6 +1,6 @@
 import express from "express";
 import {generateShareLink,downloadFile,displayFiles,deleteFiles,renameFiles} from "../controller/file_controllers.js";
-import {handleUploadFiles,getUploadsSize, getSignUp, testDatabaseConnection} from "../controller/api_controller.js";
+import {handleUploadFiles,getUploadsSize, testDatabaseConnection} from "../controller/api_controller.js";
 import multer from "multer";
 
 const router = express.Router();
@@ -31,6 +31,5 @@ router.get("/size", getUploadsSize);
 
 // Base de données
 router.get('/test', testDatabaseConnection())
-router.post("/inscription", checkSchema(user_schema), getSignUp());
 
 export default router;
